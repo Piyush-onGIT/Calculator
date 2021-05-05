@@ -167,10 +167,15 @@ public class MainActivity extends AppCompatActivity {
         eq.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String inf_data = box.getText().toString();
-                String post[] = infixToPostfix(inf_data);
-                String res = evaluate(post);
-                result.setText(res);
-
+                boolean valid = validate(inf_data);
+                if(valid){
+                    String post[] = infixToPostfix(inf_data);
+                    String res = evaluate(post);
+                    result.setText(res);
+                }
+                else{
+                    result.setText("Invalid format");
+                }
             }
         });
     }
@@ -334,7 +339,46 @@ public class MainActivity extends AppCompatActivity {
         }
         return array.ind(0);
     }
+    
+    public static boolean validate(String exp){
 
+        String arr[] = separate(exp);
+        int len = 0;
+        int i = 0;
+        while(arr[i] != null){
+            len++;
+            i++;
+        }
+        int j = 0;
+        int flag = 0;
+
+        while(j < len){
+            if(isOp(arr[0].charAt(0)) == 1){
+                flag = 1;
+                break;
+            }
+            else if(isOp(arr[len-1].charAt(0)) == 1){
+                flag = 1;
+                break;
+            }
+            else if(j < len - 1){
+                if(isOp(arr[j].charAt(0)) == 1 && isOp(arr[j+1].charAt(0)) == 1){
+                    flag = 1;
+                    break;
+                }
+            }
+            else{
+                flag = 0;
+            }
+            j++;
+        }
+        if(flag == 1){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
 }
 
 class Stack1{
